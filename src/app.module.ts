@@ -10,6 +10,8 @@ import { HomeModule } from './home/home.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { MorganModule, MorganInterceptor } from 'nest-morgan';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
+import { LocationModule } from './location/location.module';
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     ChatModule,
     CommunityModule,
     MorganModule,
+    AuthModule,
+    LocationModule,
   ],
   controllers: [AppController],
   providers: [
