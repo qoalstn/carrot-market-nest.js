@@ -12,9 +12,16 @@ import { MorganModule, MorganInterceptor } from 'nest-morgan';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { LocationModule } from './location/location.module';
+import { ContentModule } from './content/content.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    // .env를 불러오기 위해 사용
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
@@ -22,7 +29,8 @@ import { LocationModule } from './location/location.module';
       username: process.env.DB_USER,
       password: process.env.DB_PASS,
       database: process.env.DB_NAME,
-      entities: [],
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      logging: true,
       synchronize: true,
     }),
     NoticeModule,
@@ -34,6 +42,7 @@ import { LocationModule } from './location/location.module';
     MorganModule,
     AuthModule,
     LocationModule,
+    ContentModule,
   ],
   controllers: [AppController],
   providers: [
