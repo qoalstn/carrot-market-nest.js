@@ -6,12 +6,12 @@ import {
   Column,
 } from 'typeorm';
 
-@Entity() // TypeORM이 Repository Pattern을 지원하기 때문에 Entity와 Repository를 사용할 수 있다.
+@Entity('User') // TypeORM이 Repository Pattern을 지원하기 때문에 Entity와 Repository를 사용할 수 있다.
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ length: 40, unique: true })
   mail: string;
 
   @Column()

@@ -29,7 +29,7 @@ import { ConfigModule } from '@nestjs/config';
       username: process.env.DB_USER,
       password: process.env.DB_PASS,
       database: process.env.DB_NAME,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      entities: [__dirname + '../**/*.entity{.ts,.js}'],
       logging: true,
       synchronize: true,
     }),
@@ -54,3 +54,5 @@ import { ConfigModule } from '@nestjs/config';
   ],
 })
 export class AppModule {}
+
+console.log([__dirname + '../**/*.entity{.ts,.js}']);
