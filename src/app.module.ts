@@ -14,6 +14,8 @@ import { AuthModule } from './auth/auth.module';
 import { LocationModule } from './location/location.module';
 import { ContentModule } from './content/content.module';
 import { ConfigModule } from '@nestjs/config';
+import { User } from './user/entities/user.entity';
+import { Content } from './content/entities/content.entity';
 
 @Module({
   imports: [
@@ -29,7 +31,7 @@ import { ConfigModule } from '@nestjs/config';
       username: process.env.DB_USER,
       password: process.env.DB_PASS,
       database: process.env.DB_NAME,
-      entities: [__dirname + '../**/*.entity{.ts,.js}'],
+      entities: [User, Content],
       logging: true,
       synchronize: true,
     }),
@@ -54,5 +56,3 @@ import { ConfigModule } from '@nestjs/config';
   ],
 })
 export class AppModule {}
-
-console.log([__dirname + '../**/*.entity{.ts,.js}']);
