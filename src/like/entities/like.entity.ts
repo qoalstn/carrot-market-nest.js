@@ -1,1 +1,1 @@
-export class Like {}
+export class LikeEntity {}

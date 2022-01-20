@@ -14,8 +14,8 @@ import { AuthModule } from './auth/auth.module';
 import { LocationModule } from './location/location.module';
 import { ContentModule } from './content/content.module';
 import { ConfigModule } from '@nestjs/config';
-import { User } from './user/entities/user.entity';
-import { Content } from './content/entities/content.entity';
+import { UserEntity } from './user/entities/user.entity';
+import { ContentEntity } from './content/entities/content.entity';
 
 @Module({
   imports: [
@@ -31,9 +31,9 @@ import { Content } from './content/entities/content.entity';
       username: process.env.DB_USER,
       password: process.env.DB_PASS,
       database: process.env.DB_NAME,
-      entities: [User, Content],
+      entities: [UserEntity, ContentEntity],
       logging: true,
-      synchronize: true,
+      // synchronize: true,
     }),
     NoticeModule,
     HomeModule,

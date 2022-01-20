@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 
 @Entity('User') // TypeORM이 Repository Pattern을 지원하기 때문에 Entity와 Repository를 사용할 수 있다.
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
