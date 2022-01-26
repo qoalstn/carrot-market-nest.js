@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CreateContentDto } from './dto/create-content.dto';
 import { UpdateContentDto } from './dto/update-content.dto';
+import { ContnetRepository } from './content.repository';
 
 @Injectable()
 export class ContentService {
+  constructor(private readonly contnetRepo: ContnetRepository) {}
+
   create(createContentDto: CreateContentDto) {
-    return 'This action adds a new content';
+    console.log(createContentDto);
+
+    this.contnetRepo.create();
   }
 
   findAll() {

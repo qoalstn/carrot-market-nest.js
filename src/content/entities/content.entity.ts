@@ -12,6 +12,12 @@ export class ContentEntity {
   id: number;
 
   @Column()
+  user_id: number;
+
+  @Column()
+  name: string;
+
+  @Column()
   title: string;
 
   @Column()
