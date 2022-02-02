@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ContentService } from './content.service';
 import { ContentController } from './content.controller';
-import { contentRepository } from './content.repository';
+import { ContnetRepository } from './content.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([contentRepository])],
+  imports: [TypeOrmModule.forFeature([ContnetRepository])],
   controllers: [ContentController],
   providers: [ContentService],
 })
