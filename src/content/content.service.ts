@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CreateContentDto } from './dto/create-content.dto';
 import { UpdateContentDto } from './dto/update-content.dto';
-import { contentRepository } from './content.repository';
+import { ContnetRepository } from './content.repository';
 
 @Injectable()
 export class ContentService {
-  constructor(private readonly contentRepo: contentRepository) {}
+  constructor(private readonly contentRepo: ContnetRepository) {}
 
   async create(createContentDto: CreateContentDto) {
     console.log('createContentDto', createContentDto);
