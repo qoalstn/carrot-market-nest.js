@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -10,6 +11,9 @@ import {
 export class ContentEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  user_id: number;
 
   @Column()
   title: string;
