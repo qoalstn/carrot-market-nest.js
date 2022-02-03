@@ -1,8 +1,10 @@
+import { UserEntity } from '../../user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -26,4 +28,16 @@ export class ContentEntity {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  // UserEntity의 PK를 자동으로 foreign key로 생성한다.(userId)
+  // @ManyToOne(() => UserEntity, (u) => u.content)
+  // user: UserEntity;
+
+  //기존 컬럼을 외래키로 지정하고 싶을 경우
+  @ManyToOne(() => UserEntity, (u) => u.content)
+  @JoinColumn({
+    name: 'user_id',
+    referencedColumnName: 'id',
+  })
+  user: UserEntity;
 }

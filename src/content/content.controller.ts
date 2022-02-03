@@ -22,23 +22,28 @@ export class ContentController {
     return this.contentService.create(createContentDto);
   }
 
-  @Get()
-  findAll() {
-    return this.contentService.findAll();
+  @Get('/:id')
+  findAllByUser(@Param('id') id: number) {
+    return this.contentService.findAllByUser(id);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.contentService.findOne(+id);
-  }
+  // @Get()
+  // findAll() {
+  //   return this.contentService.findAll();
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateContentDto: UpdateContentDto) {
-    return this.contentService.update(+id, updateContentDto);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.contentService.findOne(+id);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.contentService.remove(+id);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateContentDto: UpdateContentDto) {
+  //   return this.contentService.update(+id, updateContentDto);
+  // }
+
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.contentService.remove(+id);
+  // }
 }

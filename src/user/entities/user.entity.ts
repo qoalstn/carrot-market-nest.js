@@ -1,3 +1,4 @@
+import { ContentEntity } from 'src/content/entities/content.entity';
 import {
   Entity,
   CreateDateColumn,
@@ -5,6 +6,8 @@ import {
   PrimaryGeneratedColumn,
   Column,
   BaseEntity,
+  OneToMany,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity('User') // TypeORM이 Repository Pattern을 지원하기 때문에 Entity와 Repository를 사용할 수 있다.
@@ -29,4 +32,11 @@ export class UserEntity extends BaseEntity {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToMany(() => ContentEntity, (c) => c.user)
+  @JoinColumn({
+    name: 'id',
+    referencedColumnName: 'user_id',
+  })
+  content: ContentEntity[];
 }
