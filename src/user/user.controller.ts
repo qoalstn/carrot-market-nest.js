@@ -11,6 +11,7 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ForbiddenException } from 'src/exceptions/http-exception.filter';
 
 @Controller('user')
 export class UserController {
@@ -19,6 +20,7 @@ export class UserController {
   //회원가입
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
+    if (!createUserDto.mail) throw new ForbiddenException();
     return this.userService.create(createUserDto);
   }
 

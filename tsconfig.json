@@ -16,20 +16,6 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false,
-    "paths": {
-      "@app/location": [
-        "libs/location/src"
-      ],
-      "@app/location/*": [
-        "libs/location/src/*"
-      ],
-      "@app/auth": [
-        "libs/auth/src"
-      ],
-      "@app/auth/*": [
-        "libs/auth/src/*"
-      ]
-    }
+    "noFallthroughCasesInSwitch": false
   }
 }
