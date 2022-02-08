@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserModule } from 'src/user/user.module';
 import { PassportModule } from '@nestjs/passport';
@@ -11,15 +11,14 @@ import { UserRepository } from 'src/user/user.repository';
 
 @Module({
   imports: [
-    UserModule,
+    forwardRef(() => UserModule),
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '60s' },
     }),
-    TypeOrmModule.forFeature([UserRepository]),
   ],
   providers: [AuthService, LocalStrategy],
-  exports: [AuthService, UserService],
+  exports: [AuthService],
 })
 export class AuthModule {}

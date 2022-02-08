@@ -32,10 +32,12 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  @UseGuards(LocalAuthGuard)
+  // @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Body() body) {
-    return this.authService.login(body.user);
+    // console.log(body);
+
+    return this.authService.login(body);
   }
 
   @UseGuards(JwtAuthGuard)
