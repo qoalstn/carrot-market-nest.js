@@ -7,21 +7,41 @@ import {
   Param,
   Delete,
   Put,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ForbiddenException } from 'src/exceptions/http-exception.filter';
+import { LocalAuthGuard } from 'src/auth/local-auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+  ) {}
 
   //회원가입
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     if (!createUserDto.mail) throw new ForbiddenException();
     return this.userService.create(createUserDto);
+  }
+
+  @UseGuards(LocalAuthGuard)
+  @Post('login')
+  async login(@Body() body) {
+    return this.authService.login(body.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user;
   }
 
   //모든 회원

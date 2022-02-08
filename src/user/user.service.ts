@@ -60,7 +60,7 @@ export class UserService {
     return `This action returns all user`;
   }
 
-  async findOneById(id: number) {
+  async findOneById(id: number): Promise<UserEntity[]> {
     const data = await this.userRepo.find({ id });
 
     return data.length > 0 ? data : null;
