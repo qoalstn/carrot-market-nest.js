@@ -4,34 +4,45 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserRepository } from './user.repository';
+import * as bcrypt from 'bcrypt';
+import {
+  ConflictException,
+  UnauthorizedException,
+} from 'src/exceptions/http-exception.filter';
 
 @Injectable()
 export class UserService {
   constructor(private readonly userRepo: UserRepository) {}
 
-  async create(inputData: CreateUserDto): Promise<object> {
-    // console.log(inputData);
+  async create(inputData: CreateUserDto) {
+    console.log(inputData);
     const { mail, name, pass, addr } = inputData;
 
+    let newId = '';
     const existUser = await this.findOneByMail(mail);
+    // console.log(1, existUser);
+    if (existUser) throw new ConflictException();
+    await bcrypt.genSalt(10, async (err, salt) => {
+      if (err) throw new UnauthorizedException();
+      bcrypt.hash(pass, salt, async (err, hash) => {
+        if (err) new UnauthorizedException();
 
-    if (existUser) {
-      return { status: 409, msg: 'already exist mail' };
-    } else {
-      const data = await this.userRepo.insert({
-        mail,
-        name,
-        pass,
-        addr,
-        created_at: new Date(),
+        const result = await this.userRepo.insert({
+          mail,
+          name,
+          pass: hash,
+          addr,
+          created_at: new Date(),
+        });
+        // console.log(5, result);
+
+        // const newUser = await this.findOneByMail(mail);
+        // console.log(2, newUser);
+
+        // if (data.identifiers.length !== 1) return { status: 500, msg: null };
       });
-
-      const createdUser = await this.findOneById(data.identifiers[0].id);
-
-      if (data.identifiers.length !== 1) return { status: 500, msg: null };
-
-      return { status: 201, data: createdUser };
-    }
+    });
+    return { status: 201, data: newId };
   }
 
   async updateUserInfo(id: number, inputData: UpdateUserDto): Promise<object> {
@@ -60,16 +71,12 @@ export class UserService {
     return `This action returns all user`;
   }
 
-  async findOneById(id: number): Promise<UserEntity[]> {
-    const data = await this.userRepo.find({ id });
-
-    return data.length > 0 ? data : null;
+  async findOneById(id: number): Promise<object> {
+    return await this.userRepo.findOne({ id });
   }
 
-  async findOneByMail(mail: string): Promise<UserEntity[]> {
-    const data = await this.userRepo.find({ mail });
-
-    return data.length > 0 ? data : null;
+  async findOneByMail(mail: string): Promise<object> {
+    return await this.userRepo.findOne({ mail });
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

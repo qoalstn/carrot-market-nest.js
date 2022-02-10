@@ -21,11 +21,17 @@ export class UserEntity extends BaseEntity {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ length: 60 })
   pass: string;
 
   @Column()
   addr: string;
+
+  @Column()
+  access_token: string;
+
+  @Column()
+  refresh_token: string;
 
   @CreateDateColumn()
   created_at: Date;

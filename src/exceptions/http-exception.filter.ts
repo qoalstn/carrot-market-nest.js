@@ -24,8 +24,26 @@ export class HttpExceptionFilter implements ExceptionFilter {
   }
 }
 
+export class NotFoundException extends HttpException {
+  constructor() {
+    super('NOT_FOUND', HttpStatus.NOT_FOUND);
+  }
+}
+
 export class ForbiddenException extends HttpException {
   constructor() {
-    super('Forbidden', HttpStatus.FORBIDDEN);
+    super('FORBIDDEN', HttpStatus.FORBIDDEN);
+  }
+}
+
+export class UnauthorizedException extends HttpException {
+  constructor() {
+    super('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
+  }
+}
+
+export class ConflictException extends HttpException {
+  constructor() {
+    super('CONFLICT', HttpStatus.CONFLICT);
   }
 }
