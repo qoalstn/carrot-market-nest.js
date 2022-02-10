@@ -15,34 +15,25 @@ export class UserService {
   constructor(private readonly userRepo: UserRepository) {}
 
   async create(inputData: CreateUserDto) {
-    console.log(inputData);
     const { mail, name, pass, addr } = inputData;
 
-    let newId = '';
     const existUser = await this.findOneByMail(mail);
-    // console.log(1, existUser);
+
     if (existUser) throw new ConflictException();
-    await bcrypt.genSalt(10, async (err, salt) => {
-      if (err) throw new UnauthorizedException();
-      bcrypt.hash(pass, salt, async (err, hash) => {
-        if (err) new UnauthorizedException();
 
-        const result = await this.userRepo.insert({
-          mail,
-          name,
-          pass: hash,
-          addr,
-          created_at: new Date(),
-        });
-        // console.log(5, result);
-
-        // const newUser = await this.findOneByMail(mail);
-        // console.log(2, newUser);
-
-        // if (data.identifiers.length !== 1) return { status: 500, msg: null };
-      });
+    const salt = await bcrypt.genSalt(10);
+    const hashed_password = await bcrypt.hash(pass, salt);
+    const data = await this.userRepo.insert({
+      mail,
+      name,
+      pass: hashed_password,
+      addr,
+      created_at: new Date(),
     });
-    return { status: 201, data: newId };
+
+    if (data.raw.insertId <= 0) return { status: 500, msg: null };
+
+    return { status: 201, data: data.raw.insertId };
   }
 
   async updateUserInfo(id: number, inputData: UpdateUserDto): Promise<object> {
