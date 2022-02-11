@@ -1,20 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { getConnection } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, CreateUserResDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserRepository } from './user.repository';
 import * as bcrypt from 'bcrypt';
 import {
   ConflictException,
+  ForbiddenException,
   UnauthorizedException,
 } from 'src/exceptions/http-exception.filter';
+import { LoginUserDto, PayLoadUserDto } from './dto/read-user.dto';
 
 @Injectable()
 export class UserService {
   constructor(private readonly userRepo: UserRepository) {}
 
-  async create(inputData: CreateUserDto) {
+  async create(inputData: CreateUserDto): Promise<CreateUserResDto> {
     const { mail, name, pass, addr } = inputData;
 
     const existUser = await this.findOneByMail(mail);
@@ -31,13 +33,24 @@ export class UserService {
       created_at: new Date(),
     });
 
-    if (data.raw.insertId <= 0) return { status: 500, msg: null };
+    if (data.raw.insertId <= 0) return { status: 500, insertId: null };
 
-    return { status: 201, data: data.raw.insertId };
+    return { status: 201, insertId: data.raw.insertId };
   }
 
-  async login(body) {
+  async login(body: LoginUserDto): Promise<PayLoadUserDto> {
     const { mail, pass } = body;
+
+    const existUser = await this.findOneByMail(mail);
+    if (!existUser) throw new ForbiddenException();
+
+    const match = await bcrypt.compare(pass, existUser.pass);
+    if (match && existUser.id && existUser.name) {
+      const user = { id: existUser.id, name: existUser.name };
+      return user;
+    } else {
+      throw new ForbiddenException();
+    }
   }
 
   async updateUserInfo(id: number, inputData: UpdateUserDto): Promise<object> {
@@ -70,7 +83,7 @@ export class UserService {
     return await this.userRepo.findOne({ id });
   }
 
-  async findOneByMail(mail: string): Promise<object> {
+  async findOneByMail(mail: string): Promise<UserEntity> {
     return await this.userRepo.findOne({ mail });
   }
 

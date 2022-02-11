@@ -14,7 +14,6 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ForbiddenException } from 'src/exceptions/http-exception.filter';
-import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { AuthService } from 'src/auth/auth.service';
 
@@ -27,18 +26,15 @@ export class UserController {
 
   //회원가입
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    if (!createUserDto.mail) throw new ForbiddenException();
-    return this.userService.create(createUserDto);
+  create(@Body() body: CreateUserDto) {
+    if (!body.mail) throw new ForbiddenException();
+    return this.userService.create(body);
   }
 
-  // @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Body() body) {
-    // console.log(body);
-    //get User
-
-    return this.authService.login(body);
+  async login(@Body() body): Promise<object> {
+    const existUser = await this.userService.login(body);
+    return await this.authService.login(existUser);
   }
 
   @UseGuards(JwtAuthGuard)
