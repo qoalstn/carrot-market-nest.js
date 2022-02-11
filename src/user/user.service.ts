@@ -36,6 +36,10 @@ export class UserService {
     return { status: 201, data: data.raw.insertId };
   }
 
+  async login(body) {
+    const { mail, pass } = body;
+  }
+
   async updateUserInfo(id: number, inputData: UpdateUserDto): Promise<object> {
     // console.log('updateUserInfo : ', inputData);
     const { mail, name, pass, addr } = inputData;
