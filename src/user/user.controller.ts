@@ -11,11 +11,13 @@ import {
   Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, CreateUserResDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ForbiddenException } from 'src/exceptions/http-exception.filter';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 import { AuthService } from 'src/auth/auth.service';
+import { LoginUserDto, TokenDto } from './dto/read-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -26,13 +28,14 @@ export class UserController {
 
   //회원가입
   @Post()
-  create(@Body() body: CreateUserDto) {
+  create(@Body() body: CreateUserDto): Promise<CreateUserResDto> {
     if (!body.mail) throw new ForbiddenException();
     return this.userService.create(body);
   }
 
+  @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Body() body): Promise<object> {
+  async login(@Body() body: LoginUserDto): Promise<TokenDto> {
     const existUser = await this.userService.login(body);
     return await this.authService.login(existUser);
   }

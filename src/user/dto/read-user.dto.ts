@@ -15,3 +15,11 @@ export class PayLoadUserDto {
   @IsString()
   name: string;
 }
+
+export class TokenDto {
+  @IsString()
+  access_token: string;
+
+  @IsString()
+  refresh_token?: string;
+}
