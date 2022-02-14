@@ -35,9 +35,8 @@ export class UserController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Body() body: LoginUserDto): Promise<TokenDto> {
-    const existUser = await this.userService.login(body);
-    return await this.authService.login(existUser);
+  async login(@Request() req) {
+    return await this.authService.login(req.user);
   }
 
   @UseGuards(JwtAuthGuard)
