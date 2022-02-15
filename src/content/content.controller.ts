@@ -3,22 +3,24 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ContentService } from './content.service';
 import { CreateContentDto } from './dto/create-content.dto';
-import { UpdateContentDto } from './dto/update-content.dto';
 
 @Controller('content')
 export class ContentController {
   constructor(private readonly contentService: ContentService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createContentDto: CreateContentDto) {
-    console.log(createContentDto);
-
+  create(@Body() createContentDto: CreateContentDto, @Req() req: any) {
+    // console.log(11, createContentDto);
+    // console.log(22, req.user);
+    createContentDto.user_id = req.user.user_id;
     return this.contentService.create(createContentDto);
   }
 
