@@ -32,8 +32,8 @@ import { ContentEntity } from './content/entities/content.entity';
       password: process.env.DB_PASS,
       database: process.env.DB_NAME,
       entities: [UserEntity, ContentEntity],
-      logging: true,
-      synchronize: true, // entities 파일 -> mysql과 연동, production환경에서는 사용하지 않는 것을 권장.
+      // logging: true,
+      // synchronize: true, // entities 파일 -> mysql과 연동, production환경에서는 사용하지 않는 것을 권장.
     }),
     NoticeModule,
     HomeModule,

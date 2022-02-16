@@ -8,6 +8,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ForbiddenException } from 'src/exceptions/http-exception.filter';
 import { ContentService } from './content.service';
 import { CreateContentDto } from './dto/create-content.dto';
 
@@ -24,8 +25,10 @@ export class ContentController {
     return this.contentService.create(createContentDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/:id')
-  findAllByUser(@Param('id') id: number) {
+  findAllByUser(@Param('id') id: number, @Req() req: any) {
+    if (Number(id) !== req.user.user_id) throw new ForbiddenException();
     return this.contentService.findAllByUser(id);
   }
 
