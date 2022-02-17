@@ -28,7 +28,7 @@ export class ContentController {
   @UseGuards(JwtAuthGuard)
   @Get('/:id')
   findAllByUser(@Param('id') id: number, @Req() req: any) {
-    if (Number(id) !== req.user.user_id) throw new ForbiddenException();
+    if (Number(id) !== req.user.user_id) throw new ForbiddenException(); //todo : jwt validate 또는 strategy에 공통으로 만들 수 있는지
     return this.contentService.findAllByUser(id);
   }
 
