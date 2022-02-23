@@ -16,6 +16,8 @@ import { ContentModule } from './content/content.module';
 import { ConfigModule } from '@nestjs/config';
 import { UserEntity } from './user/entities/user.entity';
 import { ContentEntity } from './content/entities/content.entity';
+import { ChatEntity } from './chat/entities/chat.entity';
+// import { join } from 'path';
 
 @Module({
   imports: [
@@ -31,8 +33,9 @@ import { ContentEntity } from './content/entities/content.entity';
       username: process.env.DB_USER,
       password: process.env.DB_PASS,
       database: process.env.DB_NAME,
-      entities: [UserEntity, ContentEntity],
-      // logging: true,
+      // entities: [join(__dirname, '**', '*.entity.{ts,js}')],
+      entities: [UserEntity, ContentEntity, ChatEntity],
+      logging: true,
       // synchronize: true, // entities 파일 -> mysql과 연동, production환경에서는 사용하지 않는 것을 권장.
     }),
     NoticeModule,
@@ -45,6 +48,7 @@ import { ContentEntity } from './content/entities/content.entity';
     AuthModule,
     LocationModule,
     ContentModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [

@@ -30,6 +30,12 @@ export class NotFoundException extends HttpException {
   }
 }
 
+export class BadRequestException extends HttpException {
+  constructor() {
+    super('BAD_REQUEST', HttpStatus.BAD_REQUEST);
+  }
+}
+
 export class ForbiddenException extends HttpException {
   constructor() {
     super('FORBIDDEN', HttpStatus.FORBIDDEN);
