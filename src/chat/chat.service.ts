@@ -1,28 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { CreateChatDto } from './dto/create-chat.dto';
-import { UpdateChatDto } from './dto/update-chat.dto';
+import { ChatRepository, ChatRoomRepository } from './chat.repository';
 
 @Injectable()
 export class ChatService {
-  sendChat() {}
+  constructor(
+    private readonly chatRepo: ChatRepository,
+    private readonly chatRoomRepo: ChatRoomRepository,
+  ) {}
 
-  create(createChatDto: CreateChatDto) {
-    return 'This action adds a new chat';
+  async getChatById(chat_id) {
+    const data = await this.chatRepo.findOne(chat_id);
+    return data;
   }
 
-  findAll() {
-    return `This action returns all chat`;
+  async getChatRoomById(room_id) {
+    const data = await this.chatRoomRepo.findOne(room_id);
+    return data;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} chat`;
-  }
+  async createRoom() {}
 
-  update(id: number, updateChatDto: UpdateChatDto) {
-    return `This action updates a #${id} chat`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} chat`;
-  }
+  async saveChat() {}
 }

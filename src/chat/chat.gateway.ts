@@ -6,6 +6,7 @@ import {
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 import { BadRequestException } from 'src/exceptions/http-exception.filter';
+import { CreateChatDto } from './dto/create-chat.dto';
 
 @WebSocketGateway(8080, { transports: ['websocket'] })
 export class ChatGateway {
@@ -17,18 +18,19 @@ export class ChatGateway {
   }
 
   @SubscribeMessage('chat')
-  handleChat(@MessageBody() data) {
+  handleChat(@MessageBody() data: CreateChatDto) {
     // console.log(data);
 
-    if (!data.userId) throw new BadRequestException();
+    if (!data.user_id || !data.product_id) throw new BadRequestException();
+    const { user_id, product_id } = data;
 
     // 신규 채팅 인입 시 채팅 요청 userId + Date으로 room 생성
-    if (!data.roomId) data.roomId = data.userId + new Date().toISOString();
+    if (!data.room_id) data.room_id = user_id + product_id;
 
     //room 진입
-    this.socket.socketsJoin(data.roomId);
+    this.socket.socketsJoin(data.room_id);
 
-    this.socket.to(data.roomId).emit('chat', 'return data');
+    this.socket.to(data.room_id).emit('chat', 'return data');
 
     // this.socket.to(data.roomId).emit('notice', 'return data');
 
