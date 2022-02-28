@@ -5,11 +5,12 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
-import { BadRequestException } from 'src/exceptions/http-exception.filter';
+import { UserService } from 'src/user/user.service';
 import { CreateChatDto } from './dto/create-chat.dto';
 
 @WebSocketGateway(8080, { transports: ['websocket'] })
 export class ChatGateway {
+  constructor(private readonly userService: UserService) {}
   @WebSocketServer()
   socket: Server;
 
@@ -18,11 +19,19 @@ export class ChatGateway {
   }
 
   @SubscribeMessage('chat')
-  handleChat(@MessageBody() data: CreateChatDto) {
+  async handleChat(@MessageBody() data: CreateChatDto) {
     // console.log(data);
 
-    if (!data.user_id || !data.product_id) throw new BadRequestException();
+    if (!data.user_id || !data.product_id) {
+      return this.errorHandler(400, 'Bad Request');
+    }
     const { user_id, product_id } = data;
+
+    const existUser = await this.userService.findOneById(user_id);
+
+    if (!existUser) {
+      return this.errorHandler(409, 'NO EXIST USER');
+    }
 
     // 신규 채팅 인입 시 채팅 요청 userId + Date으로 room 생성
     if (!data.room_id) data.room_id = user_id + product_id;
@@ -41,5 +50,13 @@ export class ChatGateway {
 
   handleDisconnect() {
     console.log('disconnect..');
+  }
+
+  errorHandler(status: number, message: string, room?: string) {
+    if (room) {
+      this.socket.to(room).emit('error', { status, message });
+    } else {
+      this.socket.emit('error', { status, message });
+    }
   }
 }

@@ -8,12 +8,12 @@ export class ChatService {
     private readonly chatRoomRepo: ChatRoomRepository,
   ) {}
 
-  async getChatById(chat_id) {
+  async getChatById(chat_id: number) {
     const data = await this.chatRepo.findOne(chat_id);
     return data;
   }
 
-  async getChatRoomById(room_id) {
+  async getChatRoomById(room_id: string) {
     const data = await this.chatRoomRepo.findOne(room_id);
     return data;
   }

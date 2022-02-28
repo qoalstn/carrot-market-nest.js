@@ -8,9 +8,6 @@ export class CreateChatDto {
   user_type: string;
 
   @IsString()
-  user_name: string;
-
-  @IsString()
   product_id: string;
 
   @IsString()
